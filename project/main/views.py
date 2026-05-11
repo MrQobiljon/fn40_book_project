@@ -21,6 +21,7 @@ def home(request):
 def book_detail(request, book_id):
     book = Book.objects.get(id=book_id)
     categories = Category.objects.all()
+    comments = Comment.objects.filter(book=book).order_by('-created')
 
     book.views += 1
     book.save()
@@ -28,7 +29,8 @@ def book_detail(request, book_id):
     context = {
         'book': book,
         'categories': categories,
-        'form': CommentForm()
+        'form': CommentForm(),
+        'comments': comments
     }
 
     return render(request, 'main/detail.html', context)
@@ -104,5 +106,31 @@ def save_comment(request, book_id: int):
             comment.user = request.user
             comment.save()
     return redirect('detail', book_id=book.pk)
+
+
+@login_required(login_url='home')
+def update_comment(request, book_id: int, comment_id: int):
+    comment = Comment.objects.get(id=comment_id, book_id=book_id)
+    context = {}
+    if request.user == comment.user:
+        if request.method == 'POST':
+            form = CommentForm(data=request.POST, instance=comment)
+            if form.is_valid():
+                form.save()
+                return redirect('detail', book_id=book_id)
+        context['form'] = CommentForm(instance=comment)
+    return render(request, 'main/update_comment.html', context)
+
+
+@login_required(login_url='home')
+def delete_comment(request, comment_id: int):
+    comment = Comment.objects.get(pk=comment_id)
+    if comment.user == request.user or request.user.is_superuser:
+        if request.method == 'POST':
+            book_id = comment.book.pk
+            comment.delete()
+            return redirect('detail', book_id=book_id)
+        return render(request, 'main/confirm_delete_comment.html', {'comment': comment})
+    else: return redirect('home')
 
 # ----------------------end comment----------------------

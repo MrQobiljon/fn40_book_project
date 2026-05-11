@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+
+{% block main %}
+<form method="post">
+    {% csrf_token %}
+
+    <p>{{ comment.text }} ni o'chirasizmi?</p>
+
+    <button class="btn btn-danger">Delete</button>
+    <a class="btn btn-primary" href="{% url 'detail' comment.book.pk %}">Cancel</a>
+</form>
+{% endblock main %}

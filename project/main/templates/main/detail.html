@@ -59,6 +59,28 @@
                 </form>
             </div>
 
+            <div class="card-body">
+                {% for comment in comments %}
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p style="font-size: 8pt;"><b>User:</b> {{ comment.user.username }}</p>
+                            <p>{{ comment.text }}</p>
+                            <p style="font-size: 8pt;">{{ comment.created }}</p>
+                        </div>
+                        <div>
+                            {% if request.user == comment.user %}
+                            <a href="{% url 'update_comment' book.pk comment.pk %}">✍️</a>&nbsp;&nbsp;&nbsp;
+                            {% endif %}
+
+                            {% if request.user == comment.user or request.user.is_superuser %}
+                            <a href="{% url 'delete_comment' comment.pk %}">🗑</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                <hr>
+                {% endfor %}
+            </div>
+
         </div>
     </div>
 </div>
