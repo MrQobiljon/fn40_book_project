@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    {% include 'components/_styles.html' %}
+
+    <title>
+        {{ title }}
+    </title>
+</head>
+<body>
+
+<div class="container">
+    {% include 'layout/navbar.html' %}
+
+    <div class="mt-5 mb-5">
+        {% block main %}
+            <div class="d-flex justify-content-between">
+        <div class="col-3">
+            <div class="list-group">
+                {% for category in categories %}
+                <a href="{% url 'book_by_category' category.id %}" class="list-group-item list-group-item-action">{{ category.name }}</a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-8">
+            {% block content %}
+            {% endblock content %}
+        </div>
+    </div>
+        {% endblock main %}
+    </div>
+
+
+
+    {% include 'layout/footer.html' %}
+</div>
+
+
+    {% include 'components/_scripts.html' %}
+
+</body>
+</html>

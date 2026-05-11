@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row row-cols-1 row-cols-md-3 g-4">
+                {% for book in books %}
+                <div class="col">
+                    <div class="card h-100">
+                        {% if book.image %}
+                        <img src="{{ book.image.url }}" class="card-img-top" alt="...">
+                        {% else %}
+                        <img src="https://www.shutterstock.com/image-vector/image-not-found-failure-network-260nw-2330163829.jpg" class="card-img-top" alt="...">
+                        {% endif %}
+                        <div class="card-body">
+                            <a href="{% url 'detail' book.id %}">
+                                <h5 class="card-title">{{ book.name }}</h5>
+                            </a>
+                            <p class="card-text">{{ book.text|truncatewords:10 }}</p>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">{{ book.updated }}</small>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+{% endblock content %}

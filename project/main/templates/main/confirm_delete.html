@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+
+{% block main %}
+<p><b>{{ book.name }}</b> siz rostdan ham shu kitobni o'chirmoqchimisiz?</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Ha</button>
+</form>
+<a href="{% url 'detail' book.id %}" class="btn btn-success">Ortga</a>
+{% endblock main %}
