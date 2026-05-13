@@ -1,0 +1,45 @@
+.like-btn{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: white;
+
+    border-width: 2px;
+    border-style: solid;
+    border-color: #cfcfcf;
+
+    border-radius: 50%;
+
+    font-size: 22px;
+
+    color: #999999;
+
+    cursor: pointer;
+
+    box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
+
+    transition: 0.3s;
+}
+
+
+/* hover */
+.like-btn:hover{
+    transform: scale(1.08);
+    border-color: red;
+}
+
+
+/* like bosilgan holati */
+.like-btn.liked{
+    color: red;
+    border-color: red;
+    background-color: #fff0f0;
+}

@@ -15,6 +15,13 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Asosiy Sahifa</a>
                     </li>
+
+                    {% if request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="?q=fav">Tanlanganlar</a>
+                    </li>
+                    {% endif %}
+
                     {% if request.user.is_staff %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'add_book' %}">Kitob qo'shish</a>

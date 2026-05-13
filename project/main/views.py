@@ -1,15 +1,34 @@
-from django.db.models import Model
+from django.db.models import Exists, OuterRef, Value, BooleanField
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpRequest
 from django.contrib.auth.decorators import login_required
 
-from .models import Category, Book, Comment
+from .models import Category, Book, Comment, BookLike
 from .forms import BookForm, CommentForm
 
 
 def home(request):
     categories = Category.objects.all()
-    books = Book.objects.all()
+    if request.user.is_authenticated:
+        if request.GET.get('q'):
+            books = Book.objects.filter(
+                booklike__user=request.user,
+                published=True
+            ).annotate(
+                is_like=Value(True, output_field=BooleanField())
+            )
+
+        else:
+            books = Book.objects.filter(published=True).annotate(
+                is_like = Exists(
+                    BookLike.objects.filter(
+                        user=request.user,
+                        book=OuterRef('pk')
+                    )
+                )
+            )
+    else:
+        books = Book.objects.filter(published=True)
     context = {
         'categories': categories,
         'books': books,
@@ -134,3 +153,14 @@ def delete_comment(request, comment_id: int):
     else: return redirect('home')
 
 # ----------------------end comment----------------------
+
+# ----------------------start like----------------------
+
+@login_required(login_url='home')
+def add_like_for_book(request, book_id: int):
+    book_like, created = BookLike.objects.get_or_create(book_id=book_id, user=request.user)
+    if not created:
+        book_like.delete()
+    return redirect(request.META.get('HTTP_REFERER', 'home'))
+
+# ----------------------end like------------------------
