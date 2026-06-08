@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block hero %}
+{% endblock hero %}
+
+{% block genre %}
+{% endblock genre %}
+
+
+{% block main %}
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">
+        {% if '/login/' in request.path %}
+        Kirish
+        {% else %}
+        Ro'yxatdan o'tish
+        {% endif %}
+    </button>
+</form>
+{% endblock main %}
